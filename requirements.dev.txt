@@ -1,0 +1,3 @@
+shapash>=2.3.7
+catboost>=1.2.0
+ipykernel
