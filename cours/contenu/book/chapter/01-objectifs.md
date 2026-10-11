@@ -1,4 +1,4 @@
-# Les objectifs de la sensibilisation
+# Les objectifs du cours
 
 - Connaitre les différentes méthodes d'explicabilité pour **présenter** son modèle de machine learning
 - **Etre curieux** sur le fonctionnement d'un modèle de machine learning
