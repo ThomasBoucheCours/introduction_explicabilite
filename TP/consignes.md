@@ -1,8 +1,9 @@
 # TP 
-
-Deux sessions de TP : 
-- 1 : Prise en main des données et du modèle, manipulation de la Webapp Shapash, premières analyses, propositions d'améliorations du modèle
-- 2 : Partage des premières analyse, analyse des prédictions individuelles
+Quatres sessions de TP : 
+- 1 : Prise en main des données et du modèle, manipulation de la Webapp Shapash, compréhensions des graphiques d'explicabilités, premières analyses
+- 2 : Améliorations du modèles
+- 3 : Poursuite des améliorations à partir de feature plus avancés : Eurybia, Rapport Shapash, Explainability Quality Metrics 
+- 4 : Fourniture du rapport Shapash et présentations
 
 ## Session 1
 
@@ -14,9 +15,16 @@ Deux sessions de TP :
 - Télécharger les données : [ici](data/BDD OpinionWay pour l'ADEME - Barometre changement climatique - Compilation 2023.csv)
 - 2 choix de notebook : une [classification](TP/Travaux_pratiques_barometre_changement_climatique_classification.ipynb) ou une [regression](TP/Travaux_pratiques_barometre_changement_climatique_regression.ipynb)
 
-2 Objectifs pour la 1ère session :
-- prise en main des données, du modèle, de la web Shapash
-- proposer des éléments qui permettraient d'améliorer le modèle : Suppression de variables, création de variables, Supprimer des données, ...
-    --> soit vous pouvez les mettre en place pour voir les impacts, soit je prendrais en compte certaines propositions pour montrer les impacts 
-Les propositions sont à soumettre sur ce [form](https://framaforms.org/propositionsameliorationmodele-1731248732)
+## Evaluation
+### Présentation
+- Durée : x minutes
+- Choisir un cas d'usage du modèle pour illustrer l'usage de l'explicabilité
 
+### Rapport Shapash
+- Livrer un rapport Shapash associé à l'explicabilité du modèle
+
+### Critères d'évaluations
+- Les méthodes d'explicabilités sont comprises
+- La bonne compréhension et explication du fonctionnement du modèle
+- Les améliorations ou pistes d'améliorations apportées au modèle
+- L'utilité de l'explicabilité dans l'usage
