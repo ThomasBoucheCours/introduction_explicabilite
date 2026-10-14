@@ -2,7 +2,5 @@
 *checkpoint.ipynb
 _build/
 .venv/
-agents.md
-AGENTS.md
 .DS_Store
 **/.DS_Store
