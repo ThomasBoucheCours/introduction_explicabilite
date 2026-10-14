@@ -10,7 +10,6 @@
 Une prédiction peut s'expliquer en considérant que chaque valeur des données d'entrée est un « joueur » dans un jeu où la prédiction correspond au gain. Les Shapley Values – une méthode issue de la théorie des jeux – nous indiquent comment répartir équitablement ce « gain » entre les données d'entrée.
 
 
-```{figure} ../../../../assets/shapash_local_plot_waterfall_2.png
 ---
 width: 750px
 name: shapash_local_waterfall
