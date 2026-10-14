@@ -2,7 +2,7 @@
 
 Avant d'introduire des méthodes d'explicabilité avancées, on peut rappeler qu'il existe des modèles **par essence explicables**.
 
-## 1) Modèles intrinsèquement explicables
+## Modèles intrinsèquement explicables
 
 ### Régression linéaire
 
@@ -16,9 +16,9 @@ Interprétation :
 - $\beta_j$ représente la variation attendue de $\hat{y}$ quand $x_j$ augmente d'une unité (à variables égales par ailleurs).
 - Le signe de $\beta_j$ indique le sens de l'effet (positif ou négatif).
 
-Limites :
-- L'interprétation dépend de la colinéarité entre variables.
-- Effets non linéaires et interactions peu capturés sans transformations.
+| Avantages ✅ | Limites / inconvénients ⚠️ |
+|---|---|
+| Lecture directe des coefficients; très pédagogique pour comprendre le sens et l'amplitude des effets. | Sensible à la colinéarité; effets non linéaires et interactions mal capturés sans transformations. |
 
 ### Arbre de décision
 
@@ -30,11 +30,11 @@ Pourquoi c'est interprétable :
 - Chaque prédiction suit un **chemin de décisions** lisible.
 - Les seuils sont explicites et justifiables métier.
 
-Limites :
-- Un arbre profond devient difficile à lire.
-- Une forêt (Random Forest) ou du boosting perd cette lisibilité locale directe.
+| Avantages ✅ | Limites / inconvénients ⚠️ |
+|---|---|
+| Règles simples et visuelles; décisions expliquées par des seuils explicites. | Un arbre profond devient difficile à lire; une forêt (Random Forest) ou du boosting perd cette lisibilité locale directe. |
 
-## 2) LIME (Local Interpretable Model-agnostic Explanations)
+## LIME (Local Interpretable Model-agnostic Explanations)
 
 Idée principale :
 - On explique **localement** une prédiction en remplaçant le modèle complexe par un modèle interprétable simple (souvent linéaire) autour de l'observation étudiée.
@@ -50,11 +50,9 @@ Idée principale :
 |---|---|
 | Très intuitif localement; agnostique au modèle. | Sensible au voisinage simulé et aux hyperparamètres; stabilité parfois limitée; fidélité locale, pas globale. |
 
-#### Année et référence
+Référence (2016) : Ribeiro, Singh, Guestrin, *Why Should I Trust You?: Explaining the Predictions of Any Classifier*.
 
-2016 : Ribeiro, Singh, Guestrin, "Why Should I Trust You?: Explaining the Predictions of Any Classifier".
-
-## 3) Idée des valeurs de Shapley
+## Idée des valeurs de Shapley
 
 Petit préambule historique :
 - Les valeurs de Shapley ne viennent pas du machine learning à l'origine.
@@ -80,8 +78,12 @@ Où :
 - $S$ une coalition de variables,
 - $f_x(S)$ la prédiction du modèle quand seules les variables de $S$ sont connues (les autres étant marginalisées).
 
-Propriété clé :
-- **Additivité locale** : prédiction = baseline + somme des contributions.
+Propriétés (axiomes) des valeurs de Shapley :
+
+- **Efficacité** (ou exactitude locale) : la somme des contributions de toutes les variables reconstitue exactement le gain total à expliquer (prédiction = baseline + somme des contributions).
+- Symétrie : deux variables qui jouent exactement le même rôle reçoivent la même contribution.
+- Joueur nul (dummy) : une variable qui n'apporte jamais de gain marginal reçoit une contribution nulle.
+- Additivité : si l'on additionne deux jeux/fonctions de valeur, les contributions de Shapley s'additionnent de la même manière.
 
 ### Comment évaluer $f_x(S)$ en pratique ?
 
@@ -110,12 +112,7 @@ Conséquence pédagogique importante :
 - la qualité de l'explication dépend du choix du background,
 - un background non représentatif peut biaiser les contributions.
 
-## 4) Du calcul naïf aux méthodes efficaces
-
-Le fil conducteur du cours est le suivant :
-1. partir de la théorie (calcul exact),
-2. comprendre pourquoi elle devient vite coûteuse,
-3. introduire des algorithmes plus rapides selon le type de modèle.
+## Du calcul naïf aux méthodes efficaces
 
 ### ExactExplainer : la version la plus proche de la théorie
 
@@ -127,9 +124,7 @@ Principe :
 |---|---|
 | Référence théorique claire; interprétation fidèle à la formule. | Coût combinatoire très élevé; peu scalable quand le nombre de variables augmente. |
 
-#### Année et référence
-
-Pas de papier canonique dédié dans SHAP; implémentation explicite dans SHAP (documentation dédiée visible dès 2020).
+Référence : pas de papier canonique dédié dans SHAP; implémentation explicite dans SHAP (documentation dédiée visible dès 2020).
 
 ### Méthodes agnostiques (boîte noire) : approcher le calcul exact
 
@@ -152,9 +147,7 @@ Intuition :
 |---|---|
 | Flexible (boîte noire); compromis précision/temps réglable. | Résultats bruités si peu d'échantillons; temps parfois important pour stabiliser. |
 
-#### Année et référence
-
-Pas de papier SHAP canonique dédié; méthode déjà présente dans SHAP au plus tard en 2019 (citée comme alternative dans les notes de version v0.33.0).
+Référence : pas de papier SHAP canonique dédié; méthode déjà présente dans SHAP au plus tard en 2019 (citée comme alternative dans les notes de version v0.33.0).
 
 #### PermutationExplainer
 
@@ -175,9 +168,7 @@ Intuition :
 |---|---|
 | Très pédagogique; applicable à de nombreux modèles. | Sensible au nombre de permutations; sensible au choix du background. |
 
-#### Année et référence
-
-Implémentation SHAP introduite explicitement en 2019 (release v0.33.0 : "A new PermutationExplainer").
+Référence : implémentation SHAP introduite explicitement en 2019 (release v0.33.0 : *A new PermutationExplainer*).
 
 ### Méthodes spécifiques (quand on connaît la structure du modèle)
 
@@ -201,9 +192,7 @@ Intuition :
 |---|---|
 | Très rapide sur les arbres; stable en pratique sur tabulaire. | Spécifique aux modèles d'arbres; plus technique à expliquer en détail. |
 
-#### Année et référence
-
-2018 (prépublication) / 2020 (publication) : Lundberg et al., "Consistent Individualized Feature Attribution for Tree Ensembles".
+Référence (2018 prépublication / 2020 publication) : Lundberg et al., *Consistent Individualized Feature Attribution for Tree Ensembles*.
 
 #### LinearExplainer (modèles linéaires)
 
@@ -214,9 +203,7 @@ Principe :
 |---|---|
 | Rapide; cohérent avec la lecture des coefficients. | Limité aux modèles linéaires. |
 
-#### Année et référence
-
-Pas de papier SHAP canonique dédié; nouvel explainer introduit en 2018 (release v0.21.0 de SHAP).
+Référence : pas de papier SHAP canonique dédié; nouvel explainer introduit en 2018 (release v0.21.0 de SHAP).
 
 #### DeepExplainer (réseaux de neurones)
 
@@ -238,30 +225,11 @@ Intuition :
 |---|---|
 | Adapté au deep learning; utile pour des modèles complexes. | Dépend fortement du background; plus difficile à diagnostiquer pédagogiquement. |
 
-#### Année et référence
+Référence : pas de papier SHAP canonique dédié; implémentation pleinement fonctionnelle annoncée en 2018 (release v0.19.3). Cadre théorique SHAP : Lundberg & Lee, 2017.
 
-Pas de papier SHAP canonique dédié; implémentation pleinement fonctionnelle annoncée en 2018 (release v0.19.3). Cadre théorique SHAP : Lundberg & Lee, 2017.
+## Wrap-up
 
-## 5) LIME puis SHAP : place dans le cours
-
-- LIME d'abord :
-  - très utile pour l'intuition locale,
-  - bonne porte d'entrée pour expliquer rapidement une prédiction.
-- SHAP ensuite :
-  - cadre théorique unifié,
-  - continuité entre local et global,
-  - utile pour comparer les individus de manière systématique.
-
-En pratique :
-- Commencer par LIME pour installer l'intuition locale.
-- Puis, si l'objectif est d'ancrer la théorie : introduire **ExactExplainer** sur un petit exemple.
-- Si le modèle est un arbre : privilégier **TreeSHAP**.
-- Si le modèle est une boîte noire générale : utiliser **SamplingExplainer** ou **PermutationExplainer**.
-- Garder LIME comme point de comparaison local tout au long du chapitre.
-
-## 6) Message pédagogique à retenir
-
-- Commencer par des modèles interprétables (régression linéaire, arbre simple) pour poser les bases.
-- Introduire ensuite LIME pour construire l'intuition locale.
-- Puis présenter SHAP en progression : exact (naïf) puis approximations puis méthodes spécifiques.
-- Toujours rappeler qu'une explication n'est pas une causalité : elle décrit le comportement du modèle, pas le monde réel.
+- Les modèles intrinsèquement explicables (régression linéaire, arbre simple)
+- LIME donne une explication locale intuitive et rapide, mais sensible au voisinage simulé.
+- SHAP apporte un cadre théorique plus robuste, fondé sur les valeurs de Shapley et leurs propriétés mathématiques.
+- Le choix de l'explainer dépend du modèle et du compromis précision/temps de calcul.

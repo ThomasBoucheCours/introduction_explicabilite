@@ -22,6 +22,8 @@ parts:
       - file: chapter/04-illustration
       - file: chapter/05-performance
       - file: chapter/14-methodes
+        sections:
+        - file: chapter/14b-shapley_lime
       - file: chapter/15-explicabilite_locale
       - file: chapter/16-explicabilite_globale
       - file: chapter/17-explicabilite_variable
