@@ -642,6 +642,13 @@
 <li><p><span class="math notranslate nohighlight">\(S\)</span> une coalition de variables,</p></li>
 <li><p><span class="math notranslate nohighlight">\(f_x(S)\)</span> la prédiction du modèle quand seules les variables de <span class="math notranslate nohighlight">\(S\)</span> sont connues (les autres étant marginalisées).</p></li>
 </ul>
+<figure class="align-default" id="illustration-calcul-valeur-shapley">
+<a class="reference internal image-reference" href="../_images/illustration_calcul_valeur_shapley.png"><img alt="../_images/illustration_calcul_valeur_shapley.png" src="../_images/illustration_calcul_valeur_shapley.png" style="width: 750px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 5.1 </span><span class="caption-text">Illustration du calcul de la valeur de Shapley, Image par l’auteur</span><a class="headerlink" href="#illustration-calcul-valeur-shapley" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
 <p>Propriétés (axiomes) des valeurs de Shapley :</p>
 <ul class="simple">
 <li><p><strong>Efficacité</strong> (ou exactitude locale) : la somme des contributions de toutes les variables reconstitue exactement le gain total à expliquer (prédiction = baseline + somme des contributions).</p></li>
@@ -651,7 +658,13 @@
 </ul>
 <section id="comment-evaluer-f-x-s-en-pratique">
 <h3><span class="section-number">5.4.1. </span>Comment évaluer <span class="math notranslate nohighlight">\(f_x(S)\)</span> en pratique ?<a class="headerlink" href="#comment-evaluer-f-x-s-en-pratique" title="Link to this heading">#</a></h3>
-<p><img alt="Illustration du masquage pour estimer fx(S)" src="../_images/masker.png" /></p>
+<figure class="align-default" id="illustration-masquage-fxs">
+<a class="reference internal image-reference" href="../_images/masker.png"><img alt="../_images/masker.png" src="../_images/masker.png" style="width: 750px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 5.2 </span><span class="caption-text">Illustration du masquage pour estimer <span class="math notranslate nohighlight">\(f_x(S)\)</span>, Image par l’auteur</span><a class="headerlink" href="#illustration-masquage-fxs" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
 </section>
 </section>
 <section id="du-calcul-naif-aux-methodes-efficaces">

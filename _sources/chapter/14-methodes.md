@@ -112,6 +112,15 @@ Où :
 - $S$ une coalition de variables,
 - $f_x(S)$ la prédiction du modèle quand seules les variables de $S$ sont connues (les autres étant marginalisées).
 
+```{figure} ../../../../assets/illustration_calcul_valeur_shapley.png
+---
+width: 750px
+name: illustration_calcul_valeur_shapley
+
+---
+Illustration du calcul de la valeur de Shapley, Image par l'auteur
+```
+
 Propriétés (axiomes) des valeurs de Shapley :
 
 - **Efficacité** (ou exactitude locale) : la somme des contributions de toutes les variables reconstitue exactement le gain total à expliquer (prédiction = baseline + somme des contributions).
@@ -121,7 +130,14 @@ Propriétés (axiomes) des valeurs de Shapley :
 
 ### Comment évaluer $f_x(S)$ en pratique ?
 
-![Illustration du masquage pour estimer fx(S)](../../../../assets/illustrations/masker.png)
+```{figure} ../../../../assets/illustrations/masker.png
+---
+width: 750px
+name: illustration_masquage_fxS
+
+---
+Illustration du masquage pour estimer $f_x(S)$, Image par l'auteur
+```
 
 ## Du calcul naïf aux méthodes efficaces
 
