@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>5. Méthodes agnostiques ou spécifiques &#8212; Introduction à l&#39;explicabilité</title>
+    <title>5. Modèles explicables, valeurs de Shapley et LIME &#8212; Introduction à l&#39;explicabilité</title>
   
   
   
@@ -60,6 +60,8 @@
     <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'chapter/14-methodes';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -153,6 +155,10 @@
   
 
   
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
 </div>
 
     </header>
@@ -232,7 +238,7 @@
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="04-illustration.html">3. Exemple pour illustrer le cours</a></li>
 <li class="toctree-l1"><a class="reference internal" href="05-performance.html">4. Evaluer les performances d’un modèle</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">5. Méthodes agnostiques ou spécifiques</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">5. Modèles explicables, valeurs de Shapley et LIME</a></li>
 <li class="toctree-l1"><a class="reference internal" href="15-explicabilite_locale.html">6. Explicablité locale</a></li>
 <li class="toctree-l1"><a class="reference internal" href="16-explicabilite_globale.html">7. Explicabilité globale : Feature importance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="17-explicabilite_variable.html">8. Explicabilité globale : Détails par variable</a></li>
@@ -417,7 +423,9 @@
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
 </button>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -428,11 +436,42 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Méthodes agnostiques ou spécifiques</h1>
+    <h1>Modèles explicables, valeurs de Shapley et LIME</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modeles-intrinsequement-explicables">5.1. Modèles intrinsèquement explicables</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regression-lineaire">5.1.1. Régression linéaire</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regression-logistique">5.1.2. Régression logistique</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arbre-de-decision">5.1.3. Arbre de décision</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#d-autres-modeles-interpretables-par-design">5.1.4. D’autres modèles interprétables par design</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#methodes-agnostiques-ou-specifiques">5.2. Méthodes agnostiques ou spécifiques</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lime-local-interpretable-model-agnostic-explanations">5.3. LIME (Local Interpretable Model-agnostic Explanations)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#idee-des-valeurs-de-shapley">5.4. Idée des valeurs de Shapley</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comment-evaluer-f-x-s-en-pratique">5.4.1. Comment évaluer <span class="math notranslate nohighlight">\(f_x(S)\)</span> en pratique ?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#du-calcul-naif-aux-methodes-efficaces">5.5. Du calcul naïf aux méthodes efficaces</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exactexplainer-reference-theorique">5.5.1. ExactExplainer (référence théorique)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#samplingexplainer-et-permutationexplainer-methodes-agnostiques-boite-noire-approcher-le-calcul-exact">5.5.2. SamplingExplainer et PermutationExplainer méthodes agnostiques (boîte noire) : approcher le calcul exact</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#methodes-specifiques-quand-on-connait-la-structure-du-modele">5.5.3. Méthodes spécifiques (quand on connaît la structure du modèle)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#treeshap-modeles-darbres">5.5.3.1. TreeSHAP (modèles d’arbres)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#deepexplainer-reseaux-de-neurones">5.5.3.2. DeepExplainer (réseaux de neurones)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wrap-up">5.6. Wrap-up</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -442,14 +481,307 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="methodes-agnostiques-ou-specifiques">
-<h1><span class="section-number">5. </span>Méthodes agnostiques ou spécifiques<a class="headerlink" href="#methodes-agnostiques-ou-specifiques" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="modeles-explicables-valeurs-de-shapley-et-lime">
+<h1><span class="section-number">5. </span>Modèles explicables, valeurs de Shapley et LIME<a class="headerlink" href="#modeles-explicables-valeurs-de-shapley-et-lime" title="Link to this heading">#</a></h1>
+<p>Avant d’introduire des méthodes d’explicabilité avancées, rappelons qu’il existe des modèles <strong>par essence explicables</strong>.</p>
+<section id="modeles-intrinsequement-explicables">
+<h2><span class="section-number">5.1. </span>Modèles intrinsèquement explicables<a class="headerlink" href="#modeles-intrinsequement-explicables" title="Link to this heading">#</a></h2>
+<section id="regression-lineaire">
+<h3><span class="section-number">5.1.1. </span>Régression linéaire<a class="headerlink" href="#regression-lineaire" title="Link to this heading">#</a></h3>
+<p>Dans une régression linéaire, la prédiction est une somme pondérée :</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{y} = \beta_0 + \sum_{j=1}^{p} \beta_j x_j
+\]</div>
+<p>Interprétation :</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\beta_j\)</span> représente la variation attendue de <span class="math notranslate nohighlight">\(\hat{y}\)</span> quand <span class="math notranslate nohighlight">\(x_j\)</span> augmente d’une unité (à variables égales par ailleurs).</p></li>
+<li><p>Le signe de <span class="math notranslate nohighlight">\(\beta_j\)</span> indique le sens de l’effet (positif ou négatif).</p></li>
+</ul>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Avantages ✅</p></th>
+<th class="head"><p>Limites / inconvénients ⚠️</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Lecture directe des coefficients; très pédagogique pour comprendre le sens et l’amplitude des effets.</p></td>
+<td><p>Sensible à la colinéarité; effets non linéaires et interactions mal capturés sans transformations.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="regression-logistique">
+<h3><span class="section-number">5.1.2. </span>Régression logistique<a class="headerlink" href="#regression-logistique" title="Link to this heading">#</a></h3>
+<p>Pour la classification binaire, la régression logistique modélise la probabilité via la fonction logit :</p>
+<div class="math notranslate nohighlight">
+\[
+\log\left(\frac{p(x)}{1-p(x)}\right) = \beta_0 + \sum_{j=1}^{p} \beta_j x_j
+\]</div>
+<p>Interprétation :</p>
+<ul class="simple">
+<li><p>Chaque coefficient <span class="math notranslate nohighlight">\(\beta_j\)</span> agit linéairement sur le <strong>log-odds</strong>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(e^{\beta_j}\)</span> s’interprète comme un <strong>odds ratio</strong>, utile pour quantifier l’effet d’une variable sur la probabilité d’appartenir à la classe positive.</p></li>
+</ul>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Avantages ✅</p></th>
+<th class="head"><p>Limites / inconvénients ⚠️</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Très utilisé en pratique; coefficients interprétables; bon baseline en classification tabulaire.</p></td>
+<td><p>Frontière de décision linéaire dans l’espace des variables transformées; interactions/non-linéarités à ajouter explicitement.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="arbre-de-decision">
+<h3><span class="section-number">5.1.3. </span>Arbre de décision<a class="headerlink" href="#arbre-de-decision" title="Link to this heading">#</a></h3>
+<p>Un arbre de décision suit des règles du type :</p>
+<ul class="simple">
+<li><p>“si température &gt; seuil, alors…”</p></li>
+<li><p>“sinon, aller à une autre règle”</p></li>
+</ul>
+<p>Pourquoi c’est interprétable :</p>
+<ul class="simple">
+<li><p>Chaque prédiction suit un <strong>chemin de décisions</strong> lisible.</p></li>
+<li><p>Les seuils sont explicites et justifiables métier.</p></li>
+</ul>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Avantages ✅</p></th>
+<th class="head"><p>Limites / inconvénients ⚠️</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Règles simples et visuelles; décisions expliquées par des seuils explicites.</p></td>
+<td><p>Un arbre profond devient difficile à lire; une forêt (Random Forest) ou du boosting perd cette lisibilité locale directe.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="d-autres-modeles-interpretables-par-design">
+<h3><span class="section-number">5.1.4. </span>D’autres modèles interprétables par design<a class="headerlink" href="#d-autres-modeles-interpretables-par-design" title="Link to this heading">#</a></h3>
+<p>Au-delà de la régression linéaire et de l’arbre simple, on peut citer plusieurs familles de modèles conçus pour rester interprétables :</p>
+<ul class="simple">
+<li><p><strong>GLM</strong> et <strong>GAM</strong> : ils gardent une structure additive, ce qui permet de lire l’effet de chaque variable (linéaire pour GLM, potentiellement non linéaire mais visualisable pour GAM).</p></li>
+<li><p><strong>EBM</strong> (Explainable Boosting Machine) : modèle additif boosté, souvent performant tout en conservant une lecture par effets principaux et interactions contrôlées.</p></li>
+<li><p><strong>GAMI-Net</strong> : réseau additif avec interactions explicites, pensé pour combiner flexibilité et interprétabilité.</p></li>
+<li><p><strong>FIGS</strong> : ensemble parcimonieux de petits arbres, plus lisible qu’un grand ensemble d’arbres classique.</p></li>
+<li><p>On peut aussi citer, selon les usages, les <strong>modèles à règles</strong> (listes de décision), les <strong>scorecards</strong> et certains <strong>modèles monotones contraints</strong> quand la lisibilité métier est prioritaire.</p></li>
+</ul>
+<p>Source : la documentation PiML recense ces modèles dans sa section “Interpretable Models” : <a class="reference external" href="https://selfexplainml.github.io/PiML-Toolbox/_build/html/index.html">https://selfexplainml.github.io/PiML-Toolbox/_build/html/index.html</a></p>
+</section>
+</section>
+<section id="methodes-agnostiques-ou-specifiques">
+<h2><span class="section-number">5.2. </span>Méthodes agnostiques ou spécifiques<a class="headerlink" href="#methodes-agnostiques-ou-specifiques" title="Link to this heading">#</a></h2>
 <p>Explicabilité agnostiques au modèle :</p>
 <ul class="simple">
 <li><p>Être applicable aux différents modèles</p></li>
 <li><p>S’appuie sur les données d’entrées et la prédiction</p></li>
 <li><p>Permet de comparer les résultats entre modèles et méthodes d’explicabilité</p></li>
 </ul>
+</section>
+<section id="lime-local-interpretable-model-agnostic-explanations">
+<h2><span class="section-number">5.3. </span>LIME (Local Interpretable Model-agnostic Explanations)<a class="headerlink" href="#lime-local-interpretable-model-agnostic-explanations" title="Link to this heading">#</a></h2>
+<p>Idée principale :</p>
+<ul class="simple">
+<li><p>On explique <strong>localement</strong> une prédiction en remplaçant le modèle complexe par un modèle interprétable simple (souvent linéaire) autour de l’observation étudiée.</p></li>
+</ul>
+<p>Étapes :</p>
+<ol class="arabic simple">
+<li><p>Générer des points synthétiques proches de l’observation.</p></li>
+<li><p>Prédire ces points avec le modèle “boîte noire”.</p></li>
+<li><p>Donner plus de poids aux points les plus proches.</p></li>
+<li><p>Ajuster un modèle simple local.</p></li>
+<li><p>Lire les coefficients du modèle local comme explication.</p></li>
+</ol>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Avantages ✅</p></th>
+<th class="head"><p>Limites / inconvénients ⚠️</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Très intuitif localement; agnostique au modèle.</p></td>
+<td><p>Sensible au voisinage simulé et aux hyperparamètres; stabilité parfois limitée; fidélité locale, pas globale.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Référence (2016) : Ribeiro, Singh, Guestrin, <em>Why Should I Trust You?: Explaining the Predictions of Any Classifier</em>.</p>
+</section>
+<section id="idee-des-valeurs-de-shapley">
+<h2><span class="section-number">5.4. </span>Idée des valeurs de Shapley<a class="headerlink" href="#idee-des-valeurs-de-shapley" title="Link to this heading">#</a></h2>
+<p>Petit préambule historique :</p>
+<ul class="simple">
+<li><p>Les valeurs de Shapley ne viennent pas du machine learning à l’origine.</p></li>
+<li><p>Elles ont été proposées en 1953 par <strong>Lloyd Shapley</strong>, en théorie des jeux coopératifs, pour répartir équitablement un gain entre plusieurs “joueurs”.</p></li>
+<li><p>Plus tard, cette idée a été adaptée à l’explicabilité : les “joueurs” deviennent les variables du modèle.</p></li>
+</ul>
+<p>Les valeurs de Shapley viennent donc de la théorie des jeux coopératifs.</p>
+<p>Analogie :</p>
+<ul class="simple">
+<li><p>Chaque variable est un “joueur”.</p></li>
+<li><p>La prédiction est le “gain” à répartir.</p></li>
+<li><p>La contribution de chaque variable est sa part moyenne de gain sur toutes les coalitions possibles.</p></li>
+</ul>
+<p>Formellement, pour une variable <span class="math notranslate nohighlight">\(i\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\phi_i(f, x) = \sum_{S \subseteq N \setminus \{i\}} \frac{|S|!(|N|-|S|-1)!}{|N|!}
+\big[f_{x}(S \cup \{i\}) - f_{x}(S)\big]
+\]</div>
+<p>Où :</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(N\)</span> est l’ensemble des variables,</p></li>
+<li><p><span class="math notranslate nohighlight">\(S\)</span> une coalition de variables,</p></li>
+<li><p><span class="math notranslate nohighlight">\(f_x(S)\)</span> la prédiction du modèle quand seules les variables de <span class="math notranslate nohighlight">\(S\)</span> sont connues (les autres étant marginalisées).</p></li>
+</ul>
+<p>Propriétés (axiomes) des valeurs de Shapley :</p>
+<ul class="simple">
+<li><p><strong>Efficacité</strong> (ou exactitude locale) : la somme des contributions de toutes les variables reconstitue exactement le gain total à expliquer (prédiction = baseline + somme des contributions).</p></li>
+<li><p>Symétrie : deux variables qui jouent exactement le même rôle reçoivent la même contribution.</p></li>
+<li><p>Joueur nul (dummy) : une variable qui n’apporte jamais de gain marginal reçoit une contribution nulle.</p></li>
+<li><p>Additivité : si l’on additionne deux jeux/fonctions de valeur, les contributions de Shapley s’additionnent de la même manière.</p></li>
+</ul>
+<section id="comment-evaluer-f-x-s-en-pratique">
+<h3><span class="section-number">5.4.1. </span>Comment évaluer <span class="math notranslate nohighlight">\(f_x(S)\)</span> en pratique ?<a class="headerlink" href="#comment-evaluer-f-x-s-en-pratique" title="Link to this heading">#</a></h3>
+<p><img alt="Illustration du masquage pour estimer fx(S)" src="../_images/masker.png" /></p>
+</section>
+</section>
+<section id="du-calcul-naif-aux-methodes-efficaces">
+<h2><span class="section-number">5.5. </span>Du calcul naïf aux méthodes efficaces<a class="headerlink" href="#du-calcul-naif-aux-methodes-efficaces" title="Link to this heading">#</a></h2>
+<section id="exactexplainer-reference-theorique">
+<h3><span class="section-number">5.5.1. </span>ExactExplainer (référence théorique)<a class="headerlink" href="#exactexplainer-reference-theorique" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Idée : calculer (presque) exactement les contributions selon la définition mathématique.</p></li>
+<li><p>Intérêt : c’est la référence conceptuelle.</p></li>
+</ul>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Avantages ✅</p></th>
+<th class="head"><p>Limites / inconvénients ⚠️</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Référence théorique claire; interprétation fidèle à la formule.</p></td>
+<td><p>Coût combinatoire très élevé; peu scalable quand le nombre de variables augmente.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Référence : pas de papier canonique dédié dans SHAP; implémentation explicite dans SHAP (documentation dédiée visible dès 2020).</p>
+</section>
+<section id="samplingexplainer-et-permutationexplainer-methodes-agnostiques-boite-noire-approcher-le-calcul-exact">
+<h3><span class="section-number">5.5.2. </span>SamplingExplainer et PermutationExplainer méthodes agnostiques (boîte noire) : approcher le calcul exact<a class="headerlink" href="#samplingexplainer-et-permutationexplainer-methodes-agnostiques-boite-noire-approcher-le-calcul-exact" title="Link to this heading">#</a></h3>
+<p>Le calcul exact des valeurs de Shapley devient vite trop coûteux quand le nombre de variables augmente. En pratique, on utilise donc des variantes qui gardent l’esprit Shapley, mais réduisent le temps de calcul.</p>
+<ul class="simple">
+<li><p>Idée commune : proposer des méthodes agnostiques (boîte noire) pour obtenir des explications plus rapidement que le calcul exact.</p></li>
+<li><p>Comment :</p>
+<ul>
+<li><p>SamplingExplainer échantillonne des coalitions/permutations.</p></li>
+<li><p>PermutationExplainer moyenne les contributions sur plusieurs ordres d’arrivée des variables.</p></li>
+</ul>
+</li>
+<li><p>Message clé : ces méthodes sont plus rapides, mais donnent une approximation des valeurs de Shapley (qualité dépendante du nombre d’échantillons/permutations et du background).</p></li>
+</ul>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Avantages ✅</p></th>
+<th class="head"><p>Limites / inconvénients ⚠️</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Applicables à de nombreux modèles; compromis temps/précision ajustable.</p></td>
+<td><p>Résultats approximatifs, parfois bruités; sensibilité au paramétrage et au background.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Références : méthodes présentes dans SHAP au plus tard en 2019; PermutationExplainer introduit explicitement en release v0.33.0 (<em>A new PermutationExplainer</em>).</p>
+</section>
+<section id="methodes-specifiques-quand-on-connait-la-structure-du-modele">
+<h3><span class="section-number">5.5.3. </span>Méthodes spécifiques (quand on connaît la structure du modèle)<a class="headerlink" href="#methodes-specifiques-quand-on-connait-la-structure-du-modele" title="Link to this heading">#</a></h3>
+<section id="treeshap-modeles-darbres">
+<h4><span class="section-number">5.5.3.1. </span>TreeSHAP (modèles d’arbres)<a class="headerlink" href="#treeshap-modeles-darbres" title="Link to this heading">#</a></h4>
+<p><strong>Principe :</strong></p>
+<p>TreeSHAP est une méthode spécialisée pour les modèles à base d’arbres : Decision Tree, Random Forest, Gradient Boosting, XGBoost, LightGBM, CatBoost, etc.</p>
+<p>Comme pour les valeurs de Shapley classiques, l’objectif est de mesurer ce que chaque variable apporte à la prédiction selon les variables déjà connues.</p>
+<p>La différence est que TreeSHAP exploite directement la structure de l’arbre pour effectuer ce calcul efficacement.</p>
+<p><strong>Que signifie une coalition dans un arbre ?</strong></p>
+<p>Une coalition correspond à un ensemble de variables que l’on considère comme <strong>connues</strong>.</p>
+<p>Lorsqu’on parcourt l’arbre :</p>
+<ul class="simple">
+<li><p>si la variable utilisée dans un split est <strong>connue</strong>, on peut suivre directement la branche correspondant à la valeur de l’individu ;</p></li>
+<li><p>si cette variable est <strong>masquée</strong>, on ne sait pas quelle branche choisir. On considère alors les différentes branches possibles, en les pondérant selon la proportion d’observations qui les empruntent.</p></li>
+</ul>
+<p>Par exemple :</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>                   âge &lt; 50 ?
+                  /          \
+               70 %          30 %
+</pre></div>
+</div>
+<p>Si <code class="docutils literal notranslate"><span class="pre">âge</span></code> est connu, on suit uniquement la branche correspondant à l’âge de l’individu.</p>
+<p>Si <code class="docutils literal notranslate"><span class="pre">âge</span></code> est masqué, TreeSHAP prend en compte les deux branches :</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>70 % vers la branche gauche
+30 % vers la branche droite
+</pre></div>
+</div>
+<p><strong>Intuition :</strong></p>
+<p>On peut voir TreeSHAP comme une manière de regrouper les coalitions qui se comportent de la même manière dans l’arbre
+et calculer leurs contributions en une seule fois.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Avantages ✅</p></th>
+<th class="head"><p>Limites / inconvénients ⚠️</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Très rapide sur les arbres; stable en pratique sur tabulaire.</p></td>
+<td><p>Spécifique aux modèles d’arbres; plus technique à expliquer en détail.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Référence (2018 prépublication / 2020 publication) : Lundberg et al., <em>Consistent Individualized Feature Attribution for Tree Ensembles</em>.</p>
+</section>
+<section id="deepexplainer-reseaux-de-neurones">
+<h4><span class="section-number">5.5.3.2. </span>DeepExplainer (réseaux de neurones)<a class="headerlink" href="#deepexplainer-reseaux-de-neurones" title="Link to this heading">#</a></h4>
+<p>Principe :</p>
+<ul class="simple">
+<li><p>Approxime des valeurs de Shapley pour des modèles profonds.</p></li>
+</ul>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Avantages ✅</p></th>
+<th class="head"><p>Limites / inconvénients ⚠️</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Adapté au deep learning; utile pour des modèles complexes.</p></td>
+<td><p>Dépend fortement du background; plus difficile à diagnostiquer pédagogiquement.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Référence : pas de papier SHAP canonique dédié; implémentation pleinement fonctionnelle annoncée en 2018 (release v0.19.3). Cadre théorique SHAP : Lundberg &amp; Lee, 2017.</p>
+</section>
+</section>
+</section>
+<section id="wrap-up">
+<h2><span class="section-number">5.6. </span>Wrap-up<a class="headerlink" href="#wrap-up" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Les modèles intrinsèquement explicables (régression linéaire, arbre simple)</p></li>
+<li><p>LIME donne une explication locale intuitive et rapide, mais sensible au voisinage simulé.</p></li>
+<li><p>SHAP apporte un cadre théorique plus robuste, fondé sur les valeurs de Shapley et leurs propriétés mathématiques.</p></li>
+<li><p>Le choix de l’explainer dépend du modèle et du compromis précision/temps de calcul.</p></li>
+</ul>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -506,6 +838,46 @@
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modeles-intrinsequement-explicables">5.1. Modèles intrinsèquement explicables</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regression-lineaire">5.1.1. Régression linéaire</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regression-logistique">5.1.2. Régression logistique</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arbre-de-decision">5.1.3. Arbre de décision</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#d-autres-modeles-interpretables-par-design">5.1.4. D’autres modèles interprétables par design</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#methodes-agnostiques-ou-specifiques">5.2. Méthodes agnostiques ou spécifiques</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lime-local-interpretable-model-agnostic-explanations">5.3. LIME (Local Interpretable Model-agnostic Explanations)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#idee-des-valeurs-de-shapley">5.4. Idée des valeurs de Shapley</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comment-evaluer-f-x-s-en-pratique">5.4.1. Comment évaluer <span class="math notranslate nohighlight">\(f_x(S)\)</span> en pratique ?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#du-calcul-naif-aux-methodes-efficaces">5.5. Du calcul naïf aux méthodes efficaces</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exactexplainer-reference-theorique">5.5.1. ExactExplainer (référence théorique)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#samplingexplainer-et-permutationexplainer-methodes-agnostiques-boite-noire-approcher-le-calcul-exact">5.5.2. SamplingExplainer et PermutationExplainer méthodes agnostiques (boîte noire) : approcher le calcul exact</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#methodes-specifiques-quand-on-connait-la-structure-du-modele">5.5.3. Méthodes spécifiques (quand on connaît la structure du modèle)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#treeshap-modeles-darbres">5.5.3.1. TreeSHAP (modèles d’arbres)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#deepexplainer-reseaux-de-neurones">5.5.3.2. DeepExplainer (réseaux de neurones)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wrap-up">5.6. Wrap-up</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

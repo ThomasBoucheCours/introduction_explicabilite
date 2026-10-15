@@ -65,7 +65,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="7. Explicabilité globale : Feature importance" href="16-explicabilite_globale.html" />
-    <link rel="prev" title="5. Méthodes agnostiques ou spécifiques" href="14-methodes.html" />
+    <link rel="prev" title="5. Modèles explicables, valeurs de Shapley et LIME" href="14-methodes.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -236,7 +236,7 @@
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="04-illustration.html">3. Exemple pour illustrer le cours</a></li>
 <li class="toctree-l1"><a class="reference internal" href="05-performance.html">4. Evaluer les performances d’un modèle</a></li>
-<li class="toctree-l1"><a class="reference internal" href="14-methodes.html">5. Méthodes agnostiques ou spécifiques</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14-methodes.html">5. Modèles explicables, valeurs de Shapley et LIME</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">6. Explicablité locale</a></li>
 <li class="toctree-l1"><a class="reference internal" href="16-explicabilite_globale.html">7. Explicabilité globale : Feature importance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="17-explicabilite_variable.html">8. Explicabilité globale : Détails par variable</a></li>
@@ -465,18 +465,18 @@
 <section id="shapley-values">
 <h2><span class="section-number">6.1. </span>Shapley Values<a class="headerlink" href="#shapley-values" title="Link to this heading">#</a></h2>
 <p>Une prédiction peut s’expliquer en considérant que chaque valeur des données d’entrée est un « joueur » dans un jeu où la prédiction correspond au gain. Les Shapley Values – une méthode issue de la théorie des jeux – nous indiquent comment répartir équitablement ce « gain » entre les données d’entrée.</p>
-<figure class="align-default" id="shapash-local-plot-waterfall">
-<a class="reference internal image-reference" href="../_images/shapash_local_plot_waterfall.png"><img alt="../_images/shapash_local_plot_waterfall.png" src="../_images/shapash_local_plot_waterfall.png" style="width: 750px;" />
+<figure class="align-default" id="shapash-local-waterfall">
+<a class="reference internal image-reference" href="../_images/shapash_local_plot_waterfall_2.png"><img alt="../_images/shapash_local_plot_waterfall_2.png" src="../_images/shapash_local_plot_waterfall_2.png" style="width: 750px;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Fig. 6.1 </span><span class="caption-text">contribution locale de shap, Image par l’auteur</span><a class="headerlink" href="#shapash-local-plot-waterfall" title="Link to this image">#</a></p>
+<p><span class="caption-number">Fig. 6.1 </span><span class="caption-text">Waterfall de contribution locale avec Shapash, Image par l’auteur</span><a class="headerlink" href="#shapash-local-waterfall" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
 <figure class="align-default" id="shapash-local-plot">
 <a class="reference internal image-reference" href="../_images/shapash_local_plot.png"><img alt="../_images/shapash_local_plot.png" src="../_images/shapash_local_plot.png" style="width: 750px;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Fig. 6.2 </span><span class="caption-text">contribution locale de Shapash, Image par l’auteur</span><a class="headerlink" href="#shapash-local-plot" title="Link to this image">#</a></p>
+<p><span class="caption-number">Fig. 6.2 </span><span class="caption-text">Vue locale des contributions avec Shapash, Image par l’auteur</span><a class="headerlink" href="#shapash-local-plot" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -518,7 +518,7 @@
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">5. </span>Méthodes agnostiques ou spécifiques</p>
+        <p class="prev-next-title"><span class="section-number">5. </span>Modèles explicables, valeurs de Shapley et LIME</p>
       </div>
     </a>
     <a class="right-next"
