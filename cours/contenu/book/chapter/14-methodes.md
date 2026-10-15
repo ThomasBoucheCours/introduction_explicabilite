@@ -130,7 +130,7 @@ Propriétés (axiomes) des valeurs de Shapley :
 
 ### Comment évaluer $f_x(S)$ en pratique ?
 
-```{figure} ../../../../assets/illustrations/masker.png
+```{figure} ../../../../assets/masker.png
 ---
 width: 750px
 name: illustration_masquage_fxS
@@ -189,27 +189,17 @@ Lorsqu’on parcourt l’arbre :
 - si la variable utilisée dans un split est **connue**, on peut suivre directement la branche correspondant à la valeur de l’individu ;
 - si cette variable est **masquée**, on ne sait pas quelle branche choisir. On considère alors les différentes branches possibles, en les pondérant selon la proportion d’observations qui les empruntent.
 
-Par exemple :
-
-```text
-                   âge < 50 ?
-                  /          \
-               70 %          30 %
-```
-
-Si `âge` est connu, on suit uniquement la branche correspondant à l’âge de l’individu.
-
-Si `âge` est masqué, TreeSHAP prend en compte les deux branches :
-
-```text
-70 % vers la branche gauche
-30 % vers la branche droite
-```
-
-**Intuition :**
-
-On peut voir TreeSHAP comme une manière de regrouper les coalitions qui se comportent de la même manière dans l’arbre
+**Intuition :** on peut voir TreeSHAP comme une manière de regrouper les coalitions qui se comportent de la même manière dans l’arbre
 et calculer leurs contributions en une seule fois.
+
+```{figure} ../../../../assets/exemple_treeshap.png
+---
+width: 750px
+name: illustration_masquage_fxS
+
+---
+Illustration du calcul des valeurs de shapley avec 2 variables dans un arbre, Image par l'auteur
+```
 
 | Avantages ✅ | Limites / inconvénients ⚠️ |
 |---|---|
