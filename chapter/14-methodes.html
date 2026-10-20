@@ -733,21 +733,15 @@
 <li><p>si la variable utilisée dans un split est <strong>connue</strong>, on peut suivre directement la branche correspondant à la valeur de l’individu ;</p></li>
 <li><p>si cette variable est <strong>masquée</strong>, on ne sait pas quelle branche choisir. On considère alors les différentes branches possibles, en les pondérant selon la proportion d’observations qui les empruntent.</p></li>
 </ul>
-<p>Par exemple :</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>                   âge &lt; 50 ?
-                  /          \
-               70 %          30 %
-</pre></div>
-</div>
-<p>Si <code class="docutils literal notranslate"><span class="pre">âge</span></code> est connu, on suit uniquement la branche correspondant à l’âge de l’individu.</p>
-<p>Si <code class="docutils literal notranslate"><span class="pre">âge</span></code> est masqué, TreeSHAP prend en compte les deux branches :</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>70 % vers la branche gauche
-30 % vers la branche droite
-</pre></div>
-</div>
-<p><strong>Intuition :</strong></p>
-<p>On peut voir TreeSHAP comme une manière de regrouper les coalitions qui se comportent de la même manière dans l’arbre
+<p><strong>Intuition :</strong> on peut voir TreeSHAP comme une manière de regrouper les coalitions qui se comportent de la même manière dans l’arbre
 et calculer leurs contributions en une seule fois.</p>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../_images/exemple_treeshap.png"><img alt="../_images/exemple_treeshap.png" src="../_images/exemple_treeshap.png" style="width: 750px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 5.3 </span><span class="caption-text">Illustration du calcul des valeurs de shapley avec 2 variables dans un arbre, Image par l’auteur</span><a class="headerlink" href="#id1" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Avantages ✅</p></th>
