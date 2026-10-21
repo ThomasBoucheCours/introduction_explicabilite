@@ -14,7 +14,12 @@ Quatres sessions de TP :
 - Activer ce nouvel environnmement : `source .venv/bin/activate`
 - Installer les librairies `pip install -r ./chemin/requirements.dev.txt`
 - 2 notebooks : une [classification](TP/session1/TP1_classification.ipynb) et une [regression](TP/session1/TP1_regression.ipynb)
-- 
+
+  Objectifs :
+  - Accéder à la web shapash à partir du notebook classification
+  - Prendre en main la web app
+  - Comprendre le feature engineering et les données
+  - Même chose sur la régression
 
 
 ## Evaluation
