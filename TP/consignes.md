@@ -71,10 +71,58 @@ Faut-il corriger certaines valeurs ou écarter certaines réponses (anomalies, i
 Classez vos propositions par priorité (impact attendu / effort nécessaire).
 Si possible, testez au moins une proposition et mesurez son effet.
 
+## Session 3
+### Objectif
+A partir d'une situation listées ci dessous :
+- Editer un rapport Shapash. Tutoriel disponible [ici](https://github.com/MAIF/shapash/tree/master/tutorial/generate_report)
+- Préparer la présentation de la dernière session. 
+
+### Situations
+
+#### Modèle de classification
+
+1. La MAIF à un sociétaire
+
+Situation : la direction prévention a ciblé sa campagne de prévention habitation sur les profils prédits comme changeurs et plus aptent à adopter des mesures de prévention. Le sociétaire demande pourquoi il a été contacté dans le cadre de cette campagne.
+
+2. Total devant les chargés de marketing
+
+Situation : la direction veut prédire les publics les plus proches de l’idée « la technologie va nous sauver », qui seront plus réceptifs à ses campagnes de communication. Et quels sont les messages clés possibles.
+
+3. Greenpeace France devant ses bénévoles, avant une campagne de porte-à-porte
+
+Situation : la direction des campagnes veut savoir qui convaincre en priorité pour donner à l'association et avec quels mots.
+
+4. Présenter le modèle à une collectivité
+ 
+Situation : La collectivité souhaite mieux comprendre les réponses au baromètre pour préparer une réunion sur les représentations du changement climatique.
+
+5. Discuter une prédiction avec un expert du baromètre
+
+Situation : Un expert découvre une prédiction qui lui semble surprenante pour un répondant du jeu de test.
+
+#### Modèle de régression
+
+
+6. Bercy devant le cabinet du Premier ministre
+
+Situation : Prédire l’acceptabilité d’un paquet de mesures avant de risquer un nouveau mouvement social.
+
+7. La CGT devant son congrès
+
+Situation : Prédire, parmi les salariés, qui est en capacité d’adopter les mesures et qui sera laissé de côté, pour réclamer des mesures d’accompagnement.
+
+8. La Convention citoyenne pour le climat
+
+SItuation : Prédire, avant la délibération, le nombre de mesures que chaque citoyen tiré au sort soutiendrait.
+
+9. Comprendre les erreurs entre collègues
+ 
+Situation : Avant de présenter le modèle, une collègue veut comprendre dans quels cas il se trompe.
 
 ## Evaluation
 ### Présentation
-- Durée : x minutes
+- Durée : 5 à 10 minutes
 - Choisir un cas d'usage du modèle pour illustrer l'usage de l'explicabilité :
     - A quoi sert le modèle ? 
     - Qui présente ? et à quel public ? 
