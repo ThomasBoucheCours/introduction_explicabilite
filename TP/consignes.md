@@ -74,7 +74,8 @@ Si possible, testez au moins une proposition et mesurez son effet.
 ## Session 3
 ### Objectif
 A partir d'une situation listées ci dessous :
-- Editer un rapport Shapash. Tutoriel disponible [ici](https://github.com/MAIF/shapash/tree/master/tutorial/generate_report)
+- Editer un rapport Shapash. Tutoriel disponible [ici](https://github.com/MAIF/shapash/tree/master/tutorial/generate_report).
+  Il faut installer l'extrat dépendance spécifique au rapport `pip install shapash[report]`
 - Préparer la présentation de la dernière session. 
 
 ### Situations
